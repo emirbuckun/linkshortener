@@ -6,6 +6,7 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
+import { dark } from "@clerk/ui/themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import "./globals.css";
@@ -33,10 +34,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider>
+        <ClerkProvider appearance={{ theme: dark }}>
           <header className="flex items-center justify-between gap-3 p-4 mx-auto w-full max-w-7xl px-4">
             <h1 className="text-xl font-bold">LinkShortener</h1>
             <div className="flex items-center gap-3">
