@@ -37,7 +37,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider appearance={{ theme: dark }}>
+        <ClerkProvider
+          appearance={{ theme: dark }}
+          signInForceRedirectUrl="/dashboard"
+          signUpForceRedirectUrl="/dashboard"
+        >
           <header className="flex items-center justify-between gap-3 p-4 mx-auto w-full max-w-7xl px-4">
             <h1 className="text-xl font-bold">LinkShortener</h1>
             <div className="flex items-center gap-3">
