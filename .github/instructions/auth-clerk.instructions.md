@@ -1,3 +1,7 @@
+---
+description: This file defines the authentication rules for using Clerk in the project.
+---
+
 # Clerk Auth Rules
 
 Use Clerk as the only authentication provider in this app.
