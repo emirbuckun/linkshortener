@@ -1,5 +1,6 @@
 "use client";
 
+import { Plus } from "lucide-react";
 import { type ComponentProps, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
@@ -65,7 +66,15 @@ export function CreateLinkDialog({ triggerClassName }: CreateLinkDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className={triggerClassName}>Create Link</Button>
+        <Button
+          size="icon"
+          className={triggerClassName}
+          aria-label="Create link"
+          title="Create link"
+        >
+          <Plus className="size-4" aria-hidden="true" />
+          <span className="sr-only">Create link</span>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -14,6 +15,7 @@ import {
 import { getLinksByUserId } from "@/data/links";
 
 import { CreateLinkDialog } from "./create-link-dialog";
+import { LinkItemActions } from "./link-item-actions";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -45,7 +47,7 @@ export default async function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <CreateLinkDialog triggerClassName="w-full sm:w-auto" />
+            <CreateLinkDialog />
           </CardFooter>
         </Card>
       ) : (
@@ -67,11 +69,27 @@ export default async function DashboardPage() {
                 <p className="text-xs text-muted-foreground">
                   Created {new Date(link.createdAt).toLocaleString()}
                 </p>
-                <Button asChild size="sm" variant="outline">
-                  <Link href={`/${link.slug}`} target="_blank" rel="noreferrer">
-                    Open Link
-                  </Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button asChild size="sm" variant="outline">
+                    <Link
+                      href={`/${link.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Open link"
+                      title="Open link"
+                    >
+                      <ExternalLink className="size-4" aria-hidden="true" />
+                      <span className="sr-only">Open link</span>
+                    </Link>
+                  </Button>
+                  <LinkItemActions
+                    link={{
+                      id: link.id,
+                      originalUrl: link.originalUrl,
+                      slug: link.slug,
+                    }}
+                  />
+                </div>
               </CardFooter>
             </Card>
           ))}

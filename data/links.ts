@@ -1,6 +1,6 @@
 import "server-only";
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import db from "@/db";
 import { links } from "@/db/schema";
@@ -43,6 +43,18 @@ type CreateLinkInput = {
   userId: string;
   originalUrl: string;
   customSlug?: string;
+};
+
+type UpdateLinkInput = {
+  userId: string;
+  id: number;
+  originalUrl: string;
+  slug: string;
+};
+
+type DeleteLinkInput = {
+  userId: string;
+  id: number;
 };
 
 export async function createLinkByUserId({
@@ -101,4 +113,53 @@ export async function createLinkByUserId({
   }
 
   throw new Error("Failed to create a unique slug. Please try again.");
+}
+
+export async function updateLinkByUserId({
+  userId,
+  id,
+  originalUrl,
+  slug,
+}: UpdateLinkInput) {
+  try {
+    const [updatedLink] = await db
+      .update(links)
+      .set({
+        originalUrl,
+        slug,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(links.id, id), eq(links.userId, userId)))
+      .returning({
+        id: links.id,
+        slug: links.slug,
+      });
+
+    if (!updatedLink) {
+      throw new Error("Link not found.");
+    }
+
+    return updatedLink;
+  } catch (error) {
+    if (isUniqueViolationError(error)) {
+      throw new Error("This slug is already in use.");
+    }
+
+    throw error;
+  }
+}
+
+export async function deleteLinkByUserId({ userId, id }: DeleteLinkInput) {
+  const [deletedLink] = await db
+    .delete(links)
+    .where(and(eq(links.id, id), eq(links.userId, userId)))
+    .returning({
+      id: links.id,
+    });
+
+  if (!deletedLink) {
+    throw new Error("Link not found.");
+  }
+
+  return deletedLink;
 }
