@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card";
 import { getLinksByUserId } from "@/data/links";
 
+import { CreateLinkDialog } from "./create-link-dialog";
+
 export default async function DashboardPage() {
   const { userId } = await auth();
 
@@ -24,11 +26,14 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Your Links</h1>
-        <p className="mt-2 text-muted-foreground">
-          Manage your shortened links and monitor their performance.
-        </p>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Your Links</h1>
+          <p className="mt-2 text-muted-foreground">
+            Manage your shortened links and monitor their performance.
+          </p>
+        </div>
+        <CreateLinkDialog />
       </div>
 
       {userLinks.length === 0 ? (
@@ -39,6 +44,9 @@ export default async function DashboardPage() {
               Create your first short link to start tracking clicks.
             </CardDescription>
           </CardHeader>
+          <CardFooter>
+            <CreateLinkDialog triggerClassName="w-full sm:w-auto" />
+          </CardFooter>
         </Card>
       ) : (
         <div className="space-y-4">
