@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import db from "@/db";
 import { links } from "@/db/schema";
@@ -162,4 +162,19 @@ export async function deleteLinkByUserId({ userId, id }: DeleteLinkInput) {
   }
 
   return deletedLink;
+}
+
+export async function getOriginalUrlBySlugAndIncrementClicks(slug: string) {
+  const [matchedLink] = await db
+    .update(links)
+    .set({
+      clickCount: sql`${links.clickCount} + 1`,
+      updatedAt: new Date(),
+    })
+    .where(eq(links.slug, slug))
+    .returning({
+      originalUrl: links.originalUrl,
+    });
+
+  return matchedLink?.originalUrl ?? null;
 }
