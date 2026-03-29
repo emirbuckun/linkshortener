@@ -18,9 +18,11 @@ Use server actions as the only mutation mechanism in this app.
 - Every server action must verify there is a logged-in user before database operations.
 - Server actions must use helper functions in `/data` for database mutations.
 - Do not write Drizzle queries directly inside server actions.
+- Server actions must not throw errors; they must return a typed object containing either a `success` property or an `error` property.
 
 ## Implementation Guardrails
 
 - Keep mutation business logic in server actions and database interaction logic in `/data` helpers.
 - If a needed mutation helper does not exist in `/data`, create one there and call it from the server action.
 - Perform authentication and Zod validation first, then call `/data` helpers.
+- Handle failures by returning an `error` result object rather than throwing.
