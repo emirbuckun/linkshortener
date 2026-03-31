@@ -4,7 +4,7 @@
     "postToolUse": [
       {
         "type": "command",
-        "bash": "npx prettier --write .",
+        "bash": "bash .github/hooks/format-post-tool-use.sh",
         "description": "Format code with Prettier"
       }
     ]
