@@ -5,7 +5,7 @@ import { getOriginalUrlBySlugAndIncrementClicks } from "@/data/links";
 
 export async function GET(
   _request: NextRequest,
-  context: RouteContext<"/[slug]">
+  context: RouteContext<"/[slug]">,
 ) {
   const { slug } = await context.params;
   const normalizedSlug = slug.trim().toLowerCase();
@@ -14,7 +14,8 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const originalUrl = await getOriginalUrlBySlugAndIncrementClicks(normalizedSlug);
+  const originalUrl =
+    await getOriginalUrlBySlugAndIncrementClicks(normalizedSlug);
 
   if (!originalUrl) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });

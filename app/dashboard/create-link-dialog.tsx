@@ -40,7 +40,7 @@ export function CreateLinkDialog({ triggerClassName }: CreateLinkDialogProps) {
   };
 
   const handleSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = (
-    event
+    event,
   ) => {
     event.preventDefault();
     setError(null);

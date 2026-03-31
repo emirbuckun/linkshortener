@@ -60,7 +60,7 @@ export function LinkItemActions({ link }: LinkItemActionsProps) {
   };
 
   const handleEditSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = (
-    event
+    event,
   ) => {
     event.preventDefault();
     setEditError(null);
@@ -122,7 +122,9 @@ export function LinkItemActions({ link }: LinkItemActionsProps) {
 
           <form onSubmit={handleEditSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`edit-original-url-${link.id}`}>Destination URL</Label>
+              <Label htmlFor={`edit-original-url-${link.id}`}>
+                Destination URL
+              </Label>
               <Input
                 id={`edit-original-url-${link.id}`}
                 type="url"
@@ -145,7 +147,9 @@ export function LinkItemActions({ link }: LinkItemActionsProps) {
               />
             </div>
 
-            {editError ? <p className="text-sm text-destructive">{editError}</p> : null}
+            {editError ? (
+              <p className="text-sm text-destructive">{editError}</p>
+            ) : null}
 
             <DialogFooter>
               <Button type="submit" disabled={isEditPending}>

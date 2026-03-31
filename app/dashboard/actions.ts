@@ -53,38 +53,38 @@ export type DeleteLinkActionInput = {
 
 export type CreateLinkActionResult =
   | {
-    success: {
-      id: number;
-      slug: string;
-    };
-  }
+      success: {
+        id: number;
+        slug: string;
+      };
+    }
   | {
-    error: string;
-  };
+      error: string;
+    };
 
 export type UpdateLinkActionResult =
   | {
-    success: {
-      id: number;
-      slug: string;
-    };
-  }
+      success: {
+        id: number;
+        slug: string;
+      };
+    }
   | {
-    error: string;
-  };
+      error: string;
+    };
 
 export type DeleteLinkActionResult =
   | {
-    success: {
-      id: number;
-    };
-  }
+      success: {
+        id: number;
+      };
+    }
   | {
-    error: string;
-  };
+      error: string;
+    };
 
 export async function createLinkAction(
-  input: CreateLinkActionInput
+  input: CreateLinkActionInput,
 ): Promise<CreateLinkActionResult> {
   const { userId } = await auth();
 
@@ -127,7 +127,7 @@ export async function createLinkAction(
 }
 
 export async function updateLinkAction(
-  input: UpdateLinkActionInput
+  input: UpdateLinkActionInput,
 ): Promise<UpdateLinkActionResult> {
   const { userId } = await auth();
 
@@ -171,7 +171,7 @@ export async function updateLinkAction(
 }
 
 export async function deleteLinkAction(
-  input: DeleteLinkActionInput
+  input: DeleteLinkActionInput,
 ): Promise<DeleteLinkActionResult> {
   const { userId } = await auth();
 
