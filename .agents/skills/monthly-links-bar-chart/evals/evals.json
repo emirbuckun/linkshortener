@@ -1,0 +1,23 @@
+{
+  "skill_name": "monthly-links-bar-chart",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use the database URL in my .env file to chart how many links were created per month over the last year. I need a PNG bar chart with month on X-axis and total links on Y-axis.",
+      "expected_output": "A PNG file generated from DB data with exactly 12 month buckets and link totals.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Please query Postgres from .env and create monthly counts from links.created_at for the past 12 months, then export a bar chart image to ./reports/links-year.png.",
+      "expected_output": "A PNG chart at ./reports/links-year.png and a month/count summary.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I need a last-12-month links trend chart from our links table. Use DATABASE_URL and include zero-count months in the chart output as a PNG.",
+      "expected_output": "A PNG chart where all 12 months are represented, including zero-count months.",
+      "files": []
+    }
+  ]
+}
