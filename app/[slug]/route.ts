@@ -21,5 +21,19 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  return NextResponse.redirect(originalUrl, 307);
+  let normalizedOriginalUrl: string;
+
+  try {
+    const parsedUrl = new URL(originalUrl);
+
+    if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    normalizedOriginalUrl = parsedUrl.toString();
+  } catch {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  return NextResponse.redirect(normalizedOriginalUrl, 307);
 }

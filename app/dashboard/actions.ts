@@ -10,8 +10,24 @@ import {
   updateLinkByUserId,
 } from "@/data/links";
 
+const httpUrlSchema = z
+  .string()
+  .trim()
+  .max(2048)
+  .refine((value) => {
+    try {
+      const parsedUrl = new URL(value);
+      return (
+        parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
+      );
+    } catch {
+      return false;
+    }
+  }, "Please provide a valid URL.")
+  .transform((value) => new URL(value).toString());
+
 const createLinkInputSchema = z.object({
-  originalUrl: z.url().trim().max(2048),
+  originalUrl: httpUrlSchema,
   slug: z
     .string()
     .trim()
@@ -23,7 +39,7 @@ const createLinkInputSchema = z.object({
 
 const updateLinkInputSchema = z.object({
   id: z.number().int().positive(),
-  originalUrl: z.url().trim().max(2048),
+  originalUrl: httpUrlSchema,
   slug: z
     .string()
     .trim()
@@ -53,35 +69,65 @@ export type DeleteLinkActionInput = {
 
 export type CreateLinkActionResult =
   | {
-      success: {
-        id: number;
-        slug: string;
-      };
-    }
-  | {
-      error: string;
+    success: {
+      id: number;
+      slug: string;
     };
+  }
+  | {
+    error: string;
+  };
 
 export type UpdateLinkActionResult =
   | {
-      success: {
-        id: number;
-        slug: string;
-      };
-    }
-  | {
-      error: string;
+    success: {
+      id: number;
+      slug: string;
     };
+  }
+  | {
+    error: string;
+  };
 
 export type DeleteLinkActionResult =
   | {
-      success: {
-        id: number;
-      };
-    }
-  | {
-      error: string;
+    success: {
+      id: number;
     };
+  }
+  | {
+    error: string;
+  };
+
+const SAFE_DOMAIN_ERRORS = new Set([
+  "This slug is already in use.",
+  "Link not found.",
+]);
+
+function mapActionError(
+  actionName: "create" | "update" | "delete",
+  error: unknown,
+) {
+  const errorMessage = error instanceof Error ? error.message : null;
+
+  if (errorMessage && SAFE_DOMAIN_ERRORS.has(errorMessage)) {
+    return errorMessage;
+  }
+
+  console.error(`[dashboard.actions] Unexpected ${actionName}LinkAction error`, {
+    error,
+  });
+
+  if (actionName === "create") {
+    return "Failed to create the link. Please try again.";
+  }
+
+  if (actionName === "update") {
+    return "Failed to update the link. Please try again.";
+  }
+
+  return "Failed to delete the link. Please try again.";
+}
 
 export async function createLinkAction(
   input: CreateLinkActionInput,
@@ -117,12 +163,7 @@ export async function createLinkAction(
       },
     };
   } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Failed to create the link. Please try again.";
-
-    return { error: message };
+    return { error: mapActionError("create", error) };
   }
 }
 
@@ -161,12 +202,7 @@ export async function updateLinkAction(
       },
     };
   } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Failed to update the link. Please try again.";
-
-    return { error: message };
+    return { error: mapActionError("update", error) };
   }
 }
 
@@ -202,11 +238,6 @@ export async function deleteLinkAction(
       },
     };
   } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "Failed to delete the link. Please try again.";
-
-    return { error: message };
+    return { error: mapActionError("delete", error) };
   }
 }
